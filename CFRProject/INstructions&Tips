@@ -1,0 +1,25 @@
+Instructions and Tips for developers:
+
+to run app.py:
+
+  in cmd (Windows 10):
+    1. cd to project folder
+    2. env\Scripts\activate (to activate virtualenv)
+    3. python app.py
+    4. copy http and paste it onto a web browser
+
+to fix css not updating:
+
+  in Chrome:
+    clean cache
+
+to create (or replace?*) db table:
+
+  in cmd (Windows 10):
+    	1. python
+      2. from app iport db
+      3. db.create_all()
+
+About Jinja:
+  whenever you see double-brackets ( {{ }} ) is Jinja 2 syntax.
+  Look up Jinja notation for more info.
