@@ -17,9 +17,15 @@ to create (or replace?*) db table:
 
   in cmd (Windows 10):
     	1. python
-      2. from app iport db
+      2. from app import db
       3. db.create_all()
 
 About Jinja:
   whenever you see double-brackets ( {{ }} ) is Jinja 2 syntax.
   Look up Jinja notation for more info.
+
+If Flask not a module:
+    recreate the virtual environment (write virtualenv env on cmd)
+
+Regarding SQLite:
+  it has some bugs, we should change db whenever we can, or create backups.
