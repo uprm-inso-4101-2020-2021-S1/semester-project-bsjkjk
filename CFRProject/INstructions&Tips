@@ -4,16 +4,21 @@ to run app.py:
 
   in cmd (Windows 10):
     1. cd to project folder
-    2. env\Scripts\activate (to activate virtualenv)
+    2. >cd Scripts
+       >activate (to activate virtualenv)
     3. python app.py
     4. copy http and paste it onto a web browser
+
+to create the venv if it doesn't exist:
+
+>python -m venv /path/to/new/virtual/environment.
 
 to fix css not updating:
 
   in Chrome:
     clean cache
 
-to create (or replace?*) db table:
+to create (or replace?*) db tables:
 
   in cmd (Windows 10):
     	1. python
@@ -25,7 +30,10 @@ About Jinja:
   Look up Jinja notation for more info.
 
 If Flask not a module:
-    recreate the virtual environment (write virtualenv env on cmd)
+    -recreate the virtual environment (write virtualenv env on cmd, or any other way to create the venv)
+    -and/or pip install flask flask-sqlalchemy
 
 Regarding SQLite:
   it has some bugs, we should change db whenever we can, or create backups.
+
+to stop server (or most actions on cmd): Ctrl+C
