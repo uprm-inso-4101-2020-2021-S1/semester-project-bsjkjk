@@ -2,16 +2,22 @@ from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cfr.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
 
 
 
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(15), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    fault_type = db.Column(db.String(10), nullable=False)
     content = db.Column(db.String(200), nullable=False)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    date_created = db.Column(db.DateTime, default=datetime.now())
 
     def __repr__(self):
         return '<Fault Report %r>' % self.id
@@ -21,8 +27,15 @@ class Report(db.Model):
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
+        form = request.form
+        for field in form:
+            if form[field] == "":
+                return redirect('/')
+        report_username = request.form['username']
+        report_email = request.form['email']
+        report_type = request.form['fault_type']
         report_content = request.form['content']
-        new_report = Report(content=report_content)
+        new_report = Report(username=report_username, email=report_email, fault_type=report_type, content=report_content)
 
         try:
             db.session.add(new_report)
@@ -31,8 +44,26 @@ def index():
         except:
             return 'There was an issue adding report.'
     else:
-        reports = Report.query.order_by(Report.date_created).all()
+        query_reports = Report.query.order_by(Report.date_created).all()
+        query_reports = reversed(query_reports)
+        reports = []
+        index = 0
+        for report in query_reports:
+            if index > 7:
+                break
+            reports.append(report) 
+            index += 1
+
         return render_template("index.html", reports=reports)
+
+
+@app.route('/allReports')
+def allReports():
+        reports = Report.query.order_by(Report.date_created).all()
+        reports = reversed(reports)
+        return render_template("allReports.html", reports=reports)
+
+
 
 
 @app.route('/delete/<int:id>')
@@ -64,4 +95,4 @@ def update(id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port = 5001)

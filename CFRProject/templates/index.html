@@ -5,34 +5,92 @@
 {% endblock %}
 
 {% block body %}
-<div class="content">
-  <h1 style='text-align: center'>Fault Reports</h1>
-  {% if reports|length < 1 %}
-  <h4 style='text-align: center'>There are no reports. Report one below!</h4>
-  {% else %}
-  <table>
-    <tr>
-      <th>Fault</th>
-      <th>Added</th>
-      <th>Actions</th>
-    </tr>
-    {% for report in reports %}
-      <tr>
-        <td>{{ report.content }}</td>
-        <td>{{ report.date_created.date() }}</td>
-        <td>
-          <a href="/delete/{{report.id}}">Delete</a>
-          <br>
-          <a href="/update/{{report.id}}">Update</a>
-        </td>
-      </tr>
-      {% endfor %}
-    </table>
-    {% endif %}
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <!-- Left Column -->
+      <div class="col-md-8">
+        <h1 class="mt-5" style="text-align:center">Recent Reports</h1>
 
-    <form action="/" method="POST">
-      <input type="text" name="content" id="content">
-      <input type="submit" value="Add Fault Report">
-    </form>
-  </div>
+        <!-- Timeline -->
+        <div class="my-3 p-3 bg-white rounded shadow-sm">
+          <h6 class="border-bottom border-gray pb-2 mb-0">Last 24 hours</h6>
+
+          {% for report in reports %}
+          <div class="media text-muted pt-3">
+            <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect fill="#007bff" width="100%" height="100%"/><text fill="#007bff" dy=".3em" x="50%" y="50%">32x32</text></svg>
+            <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+              <strong class="d-block text-gray-dark"><a href="">{{ report.username }}</a> · {{ report.date_created }}</strong>
+               {{ report.content }}</p>
+            </div>
+          {% endfor %}
+          <small class="d-block text-right mt-3">
+            <a href="{{ url_for('allReports') }}">All Reports</a>
+          </small>
+          </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="col-md-4 ">
+            <!-- Start of Contact list -->
+            <h2 class="mt-5 text-center">Contact Information</h2><br>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Autoridad de Energía Eléctrica</li>
+              <li class="list-group-item">Autoridad de Acueductos y Alcantarillados</li>
+              <li class="list-group-item">Internet Service Providers</li>
+              <li class="list-group-item"> Departamento de Asuntos del Consumidor</li>
+              <li class="list-group-item">Departamento de Transportación y Obras Públicas</li>
+            </ul>
+
+            <!-- End of Contact List-->
+            <!-- Start of Fault Submissions -->
+            <h2 class="mt-5 text-center">Submit Fault Report</h2><br>
+            <form action="/" method = "POST">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">@</span>
+              </div>
+              <input type="text" class="form-control" name="username" id="username" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+
+            <div class="form-group">
+              <!--<label for="exampleInputEmail1">Email address</label>-->
+              <input id="email" name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+
+  
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Fault Type</label>
+              <select class="form-control" id="fault_type" name="fault_type">
+                <option>AAA</option>
+                <option>AEE</option>
+                <option>DACO</option>
+                <option>DTOP</option>
+                <option>ISP</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Fault Report</span>
+              </div>
+              <textarea name="content" id="content" class="form-control" aria-label="With textarea"></textarea>
+            </div><br>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="footer text-center">
+        <p>BSJKJK © 2020</p>
+      </div>
+
+      <!-- Bootstrap core JavaScript -->
+      <script src="{{ url_for('static', filename='jquery/jquery.slim.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 {% endblock %}
