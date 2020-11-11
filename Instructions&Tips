@@ -30,10 +30,10 @@ About Jinja:
   Look up Jinja notation for more info.
 
 If Flask not a module:
-    -recreate the virtual environment (write virtualenv env on cmd, or any other way to create the venv)
-    -and/or pip install flask flask-sqlalchemy
+    -Remember pip install -r requirements.txt to install all required packages
 
 Regarding SQLite:
   it has some bugs, we should change db whenever we can, or create backups.
+  (note: it hasn't given any problems since then, so we decided to stay as is)
 
 to stop server (or most actions on cmd): Ctrl+C

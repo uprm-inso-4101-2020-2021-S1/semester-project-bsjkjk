@@ -158,3 +158,11 @@ body {
 .paddings{
     padding: 3em;
 }
+
+.sign-up-form {
+  width: 300px;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
+    background: #fff;
+    padding: 20px;
+    margin: 8% auto;
+}

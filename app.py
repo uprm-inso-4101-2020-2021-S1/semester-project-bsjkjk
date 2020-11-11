@@ -72,8 +72,15 @@ def allReports():
         reports = reversed(reports)
         return render_template("allReports.html", reports=reports)
 
+###################Sign Up/Sign In routes####################################
+@app.route('/signUp')
+def signUp():
+    return render_template("signup.html")
 
-
+@app.route('/signIn')
+def signIn():
+    return render_template("signIn.html")
+##############################################################################
 
 @app.route('/delete/<int:id>')
 def delete(id):
