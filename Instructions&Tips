@@ -37,3 +37,5 @@ Regarding SQLite:
   (note: it hasn't given any problems since then, so we decided to stay as is)
 
 to stop server (or most actions on cmd): Ctrl+C
+
+postgresql server password: bsjkjkinso

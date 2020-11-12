@@ -2,35 +2,30 @@ from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cfr.db'
-app.config['SQLALCHEMY_BINDS'] = {'accounts' : 'sqlite:///accounts.db'}
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 db = SQLAlchemy(app)
 
-## database used for storing fault reports ##
+## table used for storing fault reports ##
 class Report(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(15), nullable=False)
-    email = db.Column(db.String(100), nullable=False)
+    report_id = db.Column(db.Integer, primary_key=True)
     fault_type = db.Column(db.String(10), nullable=False)
     content = db.Column(db.String(200), nullable=False)
+    username = db.Column(db.String(15), unique=True, nullable=False)
+    email = db.Column(db.String(15), unique=True, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.now())
 
     def __repr__(self):
-        return '<Fault Report %r>' % self.id
+        return '<Fault Report %r>' % self.report_id
 
-## database used for storing account information ##
+## table used for storing account information ##
 class Accounts(db.Model):
-    __bind_key__ = 'accounts'
-    username = db.Column(db.String(15), unique=True, primary_key=True)
+    user_id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(15), unique=True, nullable=False)
     email = db.Column(db.String(15), unique=True, nullable=False)
     password = db.Column(db.String(15), nullable=False)
 
     def __repr__(self):
-        return '<Account %r>' % self.username
+        return '<Account %r>' % self.user_id
 
 
 @app.route('/', methods=['POST', 'GET'])
