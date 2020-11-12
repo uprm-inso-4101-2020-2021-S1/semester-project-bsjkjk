@@ -3,7 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://spfuntodxqvpaf:89bed639820cfd6b6a171efc9574fe88604059843315341a305f61d17e581e63@ec2-107-20-15-85.compute-1.amazonaws.com:5432/d8lljt8rmrco0d'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+
 
 ## table used for storing fault reports ##
 class Report(db.Model):
