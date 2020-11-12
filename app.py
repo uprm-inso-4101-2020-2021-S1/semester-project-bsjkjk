@@ -15,8 +15,8 @@ class Report(db.Model):
     report_id = db.Column(db.Integer, primary_key=True)
     fault_type = db.Column(db.String(10), nullable=False)
     content = db.Column(db.String(200), nullable=False)
-    username = db.Column(db.String(15), unique=True, nullable=False)
-    email = db.Column(db.String(15), unique=True, nullable=False)
+    report_username = db.Column(db.String(15), unique=True, nullable=False)
+    report_email = db.Column(db.String(15), unique=True, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.now())
 
     def __repr__(self):
@@ -25,8 +25,8 @@ class Report(db.Model):
 ## table used for storing account information ##
 class Accounts(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(15), unique=True, nullable=False)
-    email = db.Column(db.String(15), unique=True, nullable=False)
+    account_username = db.Column(db.String(15), unique=True, nullable=False)
+    account_email = db.Column(db.String(15), unique=True, nullable=False)
     password = db.Column(db.String(15), nullable=False)
 
     def __repr__(self):
@@ -40,11 +40,11 @@ def index():
         for field in form:
             if form[field] == "":
                 return redirect('/')
-        report_username = request.form['username']
-        report_email = request.form['email']
+        report_username = request.form['report_username']
+        report_email = request.form['report_email']
         report_type = request.form['fault_type']
         report_content = request.form['content']
-        new_report = Report(username=report_username, email=report_email, fault_type=report_type, content=report_content)
+        new_report = Report(report_username=report_username, report_email=report_email, fault_type=report_type, content=report_content)
 
         try:
             db.session.add(new_report)
