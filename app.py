@@ -20,7 +20,7 @@ class Report(db.Model):
     date_created = db.Column(db.DateTime, default=datetime.now())
 
     def __repr__(self):
-        return '<Fault Report %r>' % self.report_id
+        return '<Fault Report %r>' % self.id
 
 ## table used for storing account information ##
 class Accounts(db.Model):
