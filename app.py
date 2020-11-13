@@ -5,6 +5,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://spfuntodxqvpaf:89bed639820cfd6b6a171efc9574fe88604059843315341a305f61d17e581e63@ec2-107-20-15-85.compute-1.amazonaws.com:5432/d8lljt8rmrco0d'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -28,17 +29,17 @@ class Report(db.Model):
         return '<Fault Report %r>' % self.id
 
 ## table used for storing account information ##
-class Accounts(db.Model):
-    user_id = db.Column(db.Integer, primary_key=True)
-    account_username = db.Column(db.String(15), unique=True, nullable=False)
-    account_email = db.Column(db.String(15), unique=True, nullable=False)
-    password = db.Column(db.String(15), nullable=False)
+#class Accounts(db.Model):
+#    user_id = db.Column(db.Integer, primary_key=True)
+#    account_username = db.Column(db.String(15), unique=True, nullable=False)
+#    account_email = db.Column(db.String(15), unique=True, nullable=False)
+#    password = db.Column(db.String(15), nullable=False)
 
-    def __repr__(self, account_username, account_email, password):
-        self.account_username = account_username
-        self.account_email = account_email
-        sel.password = password
-        return '<Account %r>' % self.user_id
+#    def __repr__(self, account_username, account_email, password):
+#        self.account_username = account_username
+#        self.account_email = account_email
+#        sel.password = password
+#        return '<Account %r>' % self.user_id
 
 
 @app.route('/', methods=['POST', 'GET'])
