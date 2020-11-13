@@ -19,7 +19,12 @@ class Report(db.Model):
     email = db.Column(db.String(15), unique=True, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.now())
 
-    def __repr__(self):
+    def __repr__(self, fault_type, content, username, email,  date_created):
+        self.fault_type = fault_type
+        self.content = content
+        self.username = username
+        self.email = email
+        self.date_created = date_created
         return '<Fault Report %r>' % self.id
 
 ## table used for storing account information ##
@@ -29,7 +34,10 @@ class Accounts(db.Model):
     account_email = db.Column(db.String(15), unique=True, nullable=False)
     password = db.Column(db.String(15), nullable=False)
 
-    def __repr__(self):
+    def __repr__(self, account_username, account_email, password):
+        self.account_username = account_username
+        self.account_email = account_email
+        sel.password = password
         return '<Account %r>' % self.user_id
 
 
