@@ -17,7 +17,7 @@ class Report(db.Model):
     fault_type = db.Column(db.String(10), nullable=False)
     content = db.Column(db.String(200), nullable=False)
     username = db.Column(db.String(15), unique=True, nullable=False)
-    email = db.Column(db.String(15), unique=True, nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.now())
 
     def __repr__(self, fault_type, content, username, email,  date_created):
