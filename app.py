@@ -29,17 +29,17 @@ class Report(db.Model):
         return '<Fault Report %r>' % self.id
 
 ## table used for storing account information ##
-#class Accounts(db.Model):
-#    user_id = db.Column(db.Integer, primary_key=True)
-#    account_username = db.Column(db.String(15), unique=True, nullable=False)
-#    account_email = db.Column(db.String(15), unique=True, nullable=False)
-#    password = db.Column(db.String(15), nullable=False)
+class Accounts(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
+    account_username = db.Column(db.String(15), unique=True, nullable=False)
+    account_email = db.Column(db.String(15), unique=True, nullable=False)
+    password = db.Column(db.String(15), nullable=False)
 
-#    def __repr__(self, account_username, account_email, password):
-#        self.account_username = account_username
-#        self.account_email = account_email
-#        sel.password = password
-#        return '<Account %r>' % self.user_id
+    def __repr__(self, account_username, account_email, password):
+        self.account_username = account_username
+        self.account_email = account_email
+        sel.password = password
+        return '<Account %r>' % self.user_id
 
 
 @app.route('/', methods=['POST', 'GET'])
