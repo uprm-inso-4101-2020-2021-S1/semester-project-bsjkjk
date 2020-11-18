@@ -9,9 +9,9 @@ to run app.py:
     3. python app.py
     4. copy http and paste it onto a web browser
 
-to create the venv if it doesn't exist:
-
->python -m venv /path/to/new/virtual/environment.
+to run as developer:
+    -change DEV variable to True
+    -running as developer uses an sqlite database for testing
 
 to fix css not updating:
 
@@ -24,6 +24,8 @@ to create (or replace?*) db tables:
     	1. python
       2. from app import db
       3. db.create_all()
+  in heroku (deployment):
+      go to More > run console > type: python db_create.py to create tables if not created in the web app
 
 About Jinja:
   whenever you see double-brackets ( {{ }} ) is Jinja 2 syntax.
@@ -32,9 +34,6 @@ About Jinja:
 If Flask not a module:
     -Remember pip install -r requirements.txt to install all required packages
 
-Regarding SQLite:
-  it has some bugs, we should change db whenever we can, or create backups.
-  (note: it hasn't given any problems since then, so we decided to stay as is)
 
 to stop server (or most actions on cmd): Ctrl+C
 
