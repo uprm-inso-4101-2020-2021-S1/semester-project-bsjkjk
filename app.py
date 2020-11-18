@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
-DEV = True
+DEV = False
 
 if DEV == False:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://spfuntodxqvpaf:89bed639820cfd6b6a171efc9574fe88604059843315341a305f61d17e581e63@ec2-107-20-15-85.compute-1.amazonaws.com:5432/d8lljt8rmrco0d'
@@ -18,10 +18,10 @@ db = SQLAlchemy(app)
 ## table used for storing fault reports ##
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    fault_type = db.Column(db.String(10), unique=False, nullable=False)
+    fault_type = db.Column(db.String(10), nullable=False)
     content = db.Column(db.String(200), nullable=False)
-    username = db.Column(db.String(15),unique=False, nullable=False)
-    email = db.Column(db.String(100), unique=False, nullable=False)
+    username = db.Column(db.String(15), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.now())
 
     def __repr__(self, fault_type, content, username, email, date_created):
