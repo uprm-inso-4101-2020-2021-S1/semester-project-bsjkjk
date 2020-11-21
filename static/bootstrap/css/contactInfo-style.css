@@ -13,12 +13,11 @@ main {
     "top-grid top-grid top-grid"
     "section1 mid-section section2"
     "section3 section3 section3";
-    grid-gap: 0.5rem;
     font-family: 'Poppins', sans-serif;
 }
 
 .top-grid {
-    background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
+    /*background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);*/
     grid-area: top-grid;
     text-align: center;
     font-style: italic;
@@ -34,9 +33,9 @@ main {
     grid-area: section1;
     font-weight: bold;
     text-align: center;
+    background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
     /*margin: auto;
     box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);*/
-    /*background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);*/
     /*padding: 1fr;*/
 }
 
@@ -48,15 +47,15 @@ main {
 .mid-section img {
     display: block;
     margin: 0 auto;
-    height: 265px;
-    width: 260px;
+    height: 240px;
+    width: 240px;
 }
 
 .section2 {
     grid-area: section2;
     text-align: center;
+    background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
     /*box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);*/
-    /*background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);*/
     /*margin: 0.5% auto;*/
     /*padding: 15px;*/
     /*display: grid;*/
@@ -70,8 +69,8 @@ main {
 }
 
 .section3 {
-    background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
     grid-area: section3;
+    background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
     display: flex;
     justify-content: space-evenly;
     justify-items: center;
