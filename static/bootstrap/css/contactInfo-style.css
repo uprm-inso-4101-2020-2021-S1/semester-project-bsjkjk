@@ -8,19 +8,13 @@ main {
     display: grid;
     height: 100vh;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 3.4rem 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     grid-template-areas:
-    "nav-section nav-section nav-section" 
     "top-grid top-grid top-grid"
     "section1 mid-section section2"
     "section3 section3 section3";
     grid-gap: 0.5rem;
     font-family: 'Poppins', sans-serif;
-}
-
-.nav-section {
-    grid-area: nav-section;
-    background: #fff;
 }
 
 .top-grid {
