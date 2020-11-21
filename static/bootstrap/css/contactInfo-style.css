@@ -1,0 +1,208 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+main {
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 3.4rem 1fr 1fr 1fr;
+    grid-template-areas:
+    "nav-section nav-section nav-section" 
+    "top-grid top-grid top-grid"
+    "section1 mid-section section2"
+    "section3 section3 section3";
+    grid-gap: 0.5rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.nav-section {
+    grid-area: nav-section;
+    background: #fff;
+}
+
+.top-grid {
+    background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
+    grid-area: top-grid;
+    text-align: center;
+    font-style: italic;
+}
+
+.top-grid img {
+    float: center;
+    width: 50px;
+    height: 50px;
+}
+
+.section1 {
+    grid-area: section1;
+    font-weight: bold;
+    text-align: center;
+    /*margin: auto;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);*/
+    /*background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);*/
+    /*padding: 1fr;*/
+}
+
+.mid-section {
+    grid-area: mid-section;
+    /*background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);*/
+}
+
+.mid-section img {
+    display: block;
+    margin: 0 auto;
+    height: 265px;
+    width: 260px;
+}
+
+.section2 {
+    grid-area: section2;
+    text-align: center;
+    /*box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);*/
+    /*background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);*/
+    /*margin: 0.5% auto;*/
+    /*padding: 15px;*/
+    /*display: grid;*/
+}
+
+.fa-mobile-alt {
+    color: darkslategray;
+}
+.fa-usps {
+    color: #15569C;
+}
+
+.section3 {
+    background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
+    grid-area: section3;
+    display: flex;
+    justify-content: space-evenly;
+    justify-items: center;
+    align-items: center;
+    font-style: italic;
+}
+
+.section3 .button {
+    display: inline-block;
+    height: 60px;
+    width: 60px;
+    margin: 0 5px;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0px 10px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease-out; 
+}
+
+.section3 .button:hover {
+    width: 200px;
+}
+
+.section3 .button .icon {
+    display: inline-block;
+    height: 60px;
+    width: 60px;
+    text-align: center;
+    border-radius: 50px;
+    box-sizing: border-box;
+    line-height: 60px;
+    transition: all 0.3s ease-out; 
+}
+
+.section3 .button:nth-child(2):hover .icon {
+    background: #21759b;
+}
+
+.section3 .button:nth-child(3):hover .icon {
+    background: #4267B2;
+}
+
+.section3 .button:nth-child(4):hover .icon {
+    background: #55acee;
+}
+
+.section3 .button:nth-child(5):hover .icon {
+    background: #e4405f;
+}
+
+.section3 .button:nth-child(6):hover .icon {
+    background: #cd201f;
+}
+
+.section3 .button .icon i {
+    font-size: 25px;
+    line-height: 60px;
+    transition: all 0.3s ease-out;
+}
+
+.section3 .button:nth-child(2) .icon i {
+    color: rgb(34, 32, 32);
+}
+
+.section3 .button:nth-child(3) .icon i {
+    color: #4267B2;
+}
+
+.section3 .button:nth-child(4) .icon i {
+    color: #55acee;
+}
+
+.section3 .button:nth-child(5) .icon i {
+    color: #e4405f;
+}
+
+.section3 .button:nth-child(6) .icon i {
+    color: #cd201f;
+}
+
+.section3 .button:hover .icon i {
+    color: #fff;
+}
+
+.section3 .button span {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 60px;
+    margin-left: 10px;
+    transition: all 0.3s ease-out;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none; 
+}
+
+.section3 .button:nth-child(2) span {
+    color: #21759b;
+}
+
+.section3 .button:nth-child(3) span {
+    color: #4267B2;
+}
+
+.section3 .button:nth-child(4) span {
+    color: #55acee;
+}
+
+.section3 .button:nth-child(5) span {
+    color: #e4405f;
+}
+
+.section3 .button:nth-child(6) span {
+    color: #cd201f;
+}
+
+@media only screen and (max-width: 700px) {
+    main {
+        grid-template-columns: 1fr;
+        grid-template-rows: 3rem 1.2fr 1.5fr 3fr;
+        grid-template-areas: 
+        "nav-section"
+        "top-grid"
+        "section1"
+        "mid-section"
+        "section2"
+        "section3";
+    }
+}
