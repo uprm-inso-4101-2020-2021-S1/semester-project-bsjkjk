@@ -95,6 +95,10 @@ def signIn():
     return render_template("signIn.html")
 ##############################################################################
 
+@app.route('/contactAEE')
+def contactAEE():
+    return render_template("contactAEE.html")
+
 @app.route('/delete/<int:id>')
 def delete(id):
     report_to_delete = Report.query.get_or_404(id)
