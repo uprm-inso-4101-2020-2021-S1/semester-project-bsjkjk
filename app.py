@@ -67,7 +67,7 @@ class MyAdminIndexView(AdminIndexView):
     def is_accessible(self):
         return current_user.is_authenticated
 
-admin = Admin(app, index_view=MyAdminIndexView)
+admin = Admin(app, index_view=MyAdminIndexView())
 admin.add_view(MyModelView(Accounts, db.session))
 
 ##########################################################
@@ -132,10 +132,11 @@ def signUp():
     else:
         return render_template("signup.html")
 
-@app.route('/signIn/<int:id>')
-def signIn(id):
-    user = Accounts.query.get_or_404(id)
-    login_user(user)
+@app.route('/signIn')
+def signIn():
+    #code commented below doesn't work yet:
+    #user = Accounts.query.get_or_404(id)
+    #login_user(user)
     return render_template("signIn.html")
 
 @app.route('/logOut')
