@@ -4,19 +4,18 @@ from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask_login import UserMixin, LoginManager, current_user, login_user, logout_user
 from datetime import datetime
+import os
 
 app = Flask(__name__)
-
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 #variable DEV used for testing: it uses a sqlite dabatase to test, else: it uses heroku postgresql's database
-DEV = False
+DEV = True
 
 if DEV == False:
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://spfuntodxqvpaf:89bed639820cfd6b6a171efc9574fe88604059843315341a305f61d17e581e63@ec2-107-20-15-85.compute-1.amazonaws.com:5432/d8lljt8rmrco0d'
-    app.config['SECRET_KEY'] = 'somesecretkey'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cfr.db'
-    app.config['SECRET_KEY'] = 'somesecretkey'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
