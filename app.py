@@ -7,12 +7,12 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import InputRequired, Email, Length, EqualTo, ValidationError, DataRequired
 from datetime import datetime
-from passlib.hash import pbkdf2_sha256
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 app = Flask(__name__)
 #variable DEV used for testing: it uses a sqlite dabatase to test, else: it uses heroku postgresql's database
-DEV = False
+DEV = True
 
 if DEV == False:
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
@@ -72,7 +72,7 @@ def invalid_credentials(form, field):
     user_object = Accounts.query.filter_by(account_username=username_entered).first()
     if user_object is None:
         raise ValidationError("Username or password is incorrect")
-    elif not pbkdf2_sha256.verify(password_entered, user_object.password):
+    elif not check_password_hash(user_object.password, password_entered):
         raise ValidationError("Username or password is incorrect")
 
 
@@ -147,9 +147,9 @@ def signUp():
         username = reg_form.username.data
         email = reg_form.email.data
         password = reg_form.password.data
-        hashed_pswd = pbkdf2_sha256.hash(password)
+        hashed_pswd = generate_password_hash(password)
 
-        new_account = Accounts(account_username=username, account_email=email, password=reg_form.password.data)
+        new_account = Accounts(account_username=username, account_email=email, password=hashed_pswd)
         try:
             db.session.add(new_account)
             db.session.commit()
