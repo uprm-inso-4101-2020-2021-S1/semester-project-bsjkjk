@@ -49,7 +49,7 @@ class Accounts(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     account_username = db.Column(db.String(15), unique=True, nullable=False)
     account_email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(80), nullable=False)
+    password = db.Column(db.Text(100), nullable=False)
 
     def __repr__(self, account_username, account_email, password):
         self.account_username = account_username
