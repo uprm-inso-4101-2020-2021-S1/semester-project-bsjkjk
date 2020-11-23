@@ -43,7 +43,6 @@ main {
 
 .mid-section {
     grid-area: mid-section;
-    background: #fff;
 }
 
 .mid-section img {
