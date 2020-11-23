@@ -153,7 +153,7 @@ def signUp():
         try:
             db.session.add(new_account)
             db.session.commit()
-            return redirect('/')
+            return redirect('/SignUp')
         except:
             return 'There was a problem creating new account.'
     else:
