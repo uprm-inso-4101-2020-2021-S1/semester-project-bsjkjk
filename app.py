@@ -11,7 +11,7 @@ import os
 
 app = Flask(__name__)
 #variable DEV used for testing: it uses a sqlite dabatase to test, else: it uses heroku postgresql's database
-DEV = True
+DEV = False
 
 if DEV == False:
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
@@ -175,11 +175,11 @@ def logOut():
 
 @app.route('/contactAAA')
 def contactAAA():
-    return render_template("contactAAA.html") 
-    
+    return render_template("contactAAA.html")
+
 @app.route('/contactAEE')
 def contactAEE():
-    return render_template("contactAEE.html")   
+    return render_template("contactAEE.html")
 
 @app.route('/contactDACO')
 def contactDACO():
