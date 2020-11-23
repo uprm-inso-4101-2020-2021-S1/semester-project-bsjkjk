@@ -173,9 +173,17 @@ def logOut():
     return redirect('/signIn')
 ##############################################################################
 
+@app.route('/contactAAA')
+def contactAAA():
+    return render_template("contactAAA.html") 
+    
 @app.route('/contactAEE')
 def contactAEE():
-    return render_template("contactAEE.html")
+    return render_template("contactAEE.html")   
+
+@app.route('/contactDACO')
+def contactDACO():
+    return render_template("contactDACO.html")
 
 @app.route('/delete/<int:id>')
 def delete(id):
