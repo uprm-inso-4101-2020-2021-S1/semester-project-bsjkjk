@@ -5,8 +5,9 @@ from flask_admin.contrib.sqla import ModelView
 from flask_login import UserMixin, LoginManager, current_user, login_user, logout_user, login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import InputRequired, Email, Length, EqualTo
+from wtforms.validators import InputRequired, Email, Length, EqualTo, ValidationError, DataRequired
 from datetime import datetime
+from passlib.hash import pbkdf2_sha256
 import os
 
 app = Flask(__name__)
@@ -61,11 +62,27 @@ class Accounts(db.Model, UserMixin):
 def load_user(user_id):
     return Accounts.query.get(int(user_id))
 
+def invalid_credentials(form, field):
+    """ Username and password checker """
+
+    username_entered = form.username.data
+    password_entered = field.data
+
+    #Check username is valid
+    user_object = Accounts.query.filter_by(account_username=username_entered).first()
+    if user_object is None:
+        raise ValidationError("Username or password is incorrect")
+    elif not pbkdf2_sha256.verify(password_entered, user_object.password):
+        raise ValidationError("Username or password is incorrect")
+
+
 class LoginForm(FlaskForm):
     username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
     #pasword min and max might get changed to 8 and 80 respectively
-    password = PasswordField('password', validators=[InputRequired(), Length(min=6, max=15)])
-    remember = BooleanField('remember me')
+
+    password = PasswordField('password', validators=[InputRequired(), invalid_credentials])
+    submit_button = SubmitField('Login')
+    #remember = BooleanField('remember me')
 
 class SignUpForm(FlaskForm):
     username = StringField('username_label',
@@ -74,8 +91,15 @@ class SignUpForm(FlaskForm):
     password = PasswordField('password_label',
         validators=[InputRequired(), Length(min=6, max=15, message="Password must be between 6 and 15 characters")])
     confirm_pswd = PasswordField('confirm_pswd_label', validators=[InputRequired(), EqualTo('password', message="passwords must match")])
-    user_agree = BooleanField('agreement')
+    user_agree = BooleanField('agreement', validators=[DataRequired()])
     submit_button = SubmitField('Sign Up')
+
+    def validate_username(self, username):
+        user_object = Accounts.query.filter_by(account_username=username.data).first()
+        if user_object:
+            raise ValidationError("Username already exists, select a different username.")
+
+
 
 class MyModelView(ModelView):
     def is_accessible(self):
@@ -138,22 +162,29 @@ def signUp():
     reg_form = SignUpForm(request.form)
 
     if reg_form.validate_on_submit():
-        new_account = Accounts(account_username=reg_form.username.data, account_email=reg_form.email.data, password=reg_form.password.data)
+        password = reg_form.password.data
+        hashed_pswd = pbkdf2_sha256.hash(password)
+
+        new_account = Accounts(account_username=reg_form.username.data, account_email=reg_form.email.data, password=hashed_pswd)
         try:
             db.session.add(new_account)
             db.session.commit()
-            return redirect('/')
+            return redirect(url_for('signIn'))
         except:
             return 'There was a problem creating new account.'
     else:
         return render_template("signup.html", form=reg_form)
 
-@app.route('/signIn')
+@app.route('/signIn', methods=['GET', 'POST'])
 def signIn():
+    login_form = LoginForm()
+
+    if login_form.validate_on_submit():
+        return "Logged in, finally!"
     #username = request.form['username']
     #user = Accounts.query.get_or_404(current_user)
     #login_user(user)
-    return render_template("signIn.html")
+    return render_template("signIn.html", form=login_form)
 
 @app.route('/logOut')
 @login_required

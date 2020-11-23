@@ -43,7 +43,7 @@
             <li>{{ error }}</li>
           {% endfor %}
         </ul>
-        <p><span><input type="checkbox" name="" value=""></span>I agree to the terms of services
+        <p><span>{{ form.user_agree() }}</span> I agree to the terms of services
         </p>
         {{ form.submit_button(class_='btn btn-primary') }}
         <hr>
