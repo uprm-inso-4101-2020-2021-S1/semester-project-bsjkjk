@@ -97,22 +97,6 @@ class SignUpForm(FlaskForm):
         if user_object:
             raise ValidationError("Username already exists, select a different username.")
 
-
-
-class MyModelView(ModelView):
-    def is_accessible(self):
-        return current_user.is_authenticated
-
-    def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for('signIn'))
-
-class MyAdminIndexView(AdminIndexView):
-    def is_accessible(self):
-        return current_user.is_authenticated
-
-admin = Admin(app, index_view=MyAdminIndexView())
-admin.add_view(MyModelView(Accounts, db.session))
-
 ##########################################################
 
 @app.route('/', methods=['POST', 'GET'])
@@ -160,10 +144,12 @@ def signUp():
     reg_form = SignUpForm(request.form)
 
     if reg_form.validate_on_submit():
+        username = reg_form.username.data
+        email = reg_form.email.data
         password = reg_form.password.data
         hashed_pswd = pbkdf2_sha256.hash(password)
 
-        new_account = Accounts(account_username=reg_form.username.data, account_email=reg_form.email.data, password=hashed_pswd)
+        new_account = Accounts(account_username=username, account_email=email, password=reg_form.password.data)
         try:
             db.session.add(new_account)
             db.session.commit()

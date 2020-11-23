@@ -30,6 +30,7 @@
           </ul>
         </div>
         {{ form.submit_button(class_='btn btn-primary') }}
+        {{ form.csrf_token }}
         </form>
     </div>
 {% endblock %}
