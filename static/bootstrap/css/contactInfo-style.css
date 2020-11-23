@@ -20,7 +20,7 @@ main {
 .top-grid {
     grid-area: top-grid;
     /*background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);*/
-    background: #fff;
+    /*background: #fff;*/
     text-align: center;
     font-style: italic;
 }
@@ -121,7 +121,9 @@ main {
 }
 
 .section3 .button:nth-child(5):hover .icon {
-    background: #e4405f;
+    /*background: #e4405f;*/
+    color: transparent;
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
 }
 
 .section3 .button:nth-child(6):hover .icon {
