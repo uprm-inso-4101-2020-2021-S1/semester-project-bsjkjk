@@ -2,28 +2,29 @@ from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
-from flask_login import UserMixin, LoginManager, current_user, login_user, logout_user
+from flask_login import UserMixin, LoginManager, current_user, login_user, logout_user, login_required
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms.validators import InputRequired, Email, Length, EqualTo
 from datetime import datetime
 import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 #variable DEV used for testing: it uses a sqlite dabatase to test, else: it uses heroku postgresql's database
-DEV = False
+DEV = True
 
 if DEV == False:
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+    app.secret_key = os.environ.get('SECRET_KEY')
 
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cfr.db'
+    app.secret_key = 'somerandomsecretkey'
+
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 login = LoginManager(app)
-
-@login.user_loader
-def load_user(user_id):
-    return Accounts.query.get(user_id)
 
 ## table used for storing fault reports ##
 class Report(db.Model):
@@ -54,7 +55,32 @@ class Accounts(db.Model, UserMixin):
         self.account_email = account_email
         self.password = password
         return '<Account %r>' % self.id
+
 ##### Account and admin stuff ########################
+@login.user_loader
+def load_user(user_id):
+    return Accounts.query.get(int(user_id))
+
+class LoginForm(FlaskForm):
+    """ Login Form """
+
+    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
+    #pasword min and max might get changed to 8 and 80 respectively
+    password = PasswordField('password', validators=[InputRequired(), Length(min=6, max=15)])
+    remember = BooleanField('remember me')
+
+class SignUpForm(FlaskForm):
+    """ SignUp Form """
+
+    username = StringField('username_label',
+        validators=[InputRequired(), Length(min=4, max=15, message="Username must be between 4 and 15 characters")])
+    email = StringField('email_label', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
+    password = PasswordField('password_label',
+        validators=[InputRequired(), Length(min=6, max=15, message="Password must be between 6 and 15 characters")])
+    confirm_pswd = PasswordField('confirm_pswd_label', validators=[InputRequired(), EqualTo('password', message="passwords must match")])
+    user_agree = BooleanField('agreement')
+    submit_button = SubmitField('Sign Up')
+
 class MyModelView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated
@@ -113,7 +139,9 @@ def allReports():
 ###################Sign Up/Sign In routes (and LogOut)####################################
 @app.route('/signUp', methods=['POST', 'GET'])
 def signUp():
-    if request.method == 'POST':
+    reg_form = SignUpForm()
+
+    if reg_form.validate_on_submit():
         form  = request.form
         for field in form:
             if form[field] == "":
@@ -129,16 +157,17 @@ def signUp():
         except:
             return 'There was a problem creating new account.'
     else:
-        return render_template("signup.html")
+        return render_template("signup.html", form=reg_form)
 
 @app.route('/signIn')
 def signIn():
-    #code commented below doesn't work yet:
-    #user = Accounts.query.get_or_404(id)
+    #username = request.form['username']
+    #user = Accounts.query.get_or_404(current_user)
     #login_user(user)
     return render_template("signIn.html")
 
 @app.route('/logOut')
+@login_required
 def logOut():
     logout_user()
     return redirect('/signIn')

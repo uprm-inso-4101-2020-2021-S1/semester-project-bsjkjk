@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block head%}
+{% block head %}
 <title>Sign Up Form</title>
 {% endblock %}
 
@@ -13,20 +13,41 @@
           <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon1">@</span>
           </div>
-          <input type="text" class="form-control" name="username" id="username" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+          {{ form.username(id='username', class_='form-control', placeholder='Username') }}
+          <ul>
+            {% for error in form.username.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
         </div>
         <div class="form-group">
             <!--<label for="exampleInputEmail1">Email address</label>-->
-          <input id="email" name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+          {{ form.email(id='email', class_='form-control', placeholder='Enter email') }}
+          <ul>
+            {% for error in form.email.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
           <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
         </div>
-        <input type="password" name="password" class="form-control" id="password" placeholder="Your password">
-        <input type="password" name="passwordconfirm" class="form-control" id="passwordconfirm" placeholder="Confirm your password">
+        {{ form.password(id='password', class_='form-control', placeholder='Your password') }}
+        <ul>
+          {% for error in form.password.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {{ form.confirm_pswd(id='confirm_pswd', class_='form-control', placeholder='Confirm your password') }}
+        <ul>
+          {% for error in form.confirm_pswd.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
         <p><span><input type="checkbox" name="" value=""></span>I agree to the terms of services
         </p>
-        <button type="submit" class="btn btn-primary""> Sign Up</button>
+        {{ form.submit_button(class_='btn btn-primary') }}
         <hr>
         <p>Do you have an account?<a href="/signIn"> Sign In</a></p>
+        {{ form.csrf_token }}
         </form>
     </div>
 {% endblock %}
