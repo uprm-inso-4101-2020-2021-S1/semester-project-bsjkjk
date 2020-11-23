@@ -62,16 +62,12 @@ def load_user(user_id):
     return Accounts.query.get(int(user_id))
 
 class LoginForm(FlaskForm):
-    """ Login Form """
-
     username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
     #pasword min and max might get changed to 8 and 80 respectively
     password = PasswordField('password', validators=[InputRequired(), Length(min=6, max=15)])
     remember = BooleanField('remember me')
 
 class SignUpForm(FlaskForm):
-    """ SignUp Form """
-
     username = StringField('username_label',
         validators=[InputRequired(), Length(min=4, max=15, message="Username must be between 4 and 15 characters")])
     email = StringField('email_label', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
@@ -139,21 +135,14 @@ def allReports():
 ###################Sign Up/Sign In routes (and LogOut)####################################
 @app.route('/signUp', methods=['POST', 'GET'])
 def signUp():
-    reg_form = SignUpForm()
+    reg_form = SignUpForm(request.form)
 
     if reg_form.validate_on_submit():
-        form  = request.form
-        for field in form:
-            if form[field] == "":
-                return redirect('/SignUp')
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
-        new_account = Accounts(account_username=username, account_email=email, password=password)
+        new_account = Accounts(account_username=reg_form.username.data, account_email=reg_form.email.data, password=reg_form.password.data)
         try:
             db.session.add(new_account)
             db.session.commit()
-            return redirect('/SignUp')
+            return redirect('/')
         except:
             return 'There was a problem creating new account.'
     else:
