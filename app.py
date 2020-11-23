@@ -174,6 +174,10 @@ def contactAEE():
 def contactDACO():
     return render_template("contactDACO.html")
 
+@app.route('/contactDTOP')
+def contactDTOP():
+    return render_template("contactDTOP.html")    
+
 @app.route('/delete/<int:id>')
 def delete(id):
     report_to_delete = Report.query.get_or_404(id)
