@@ -12,7 +12,7 @@ import os
 
 app = Flask(__name__)
 #variable DEV used for testing: it uses a sqlite dabatase to test, else: it uses heroku postgresql's database
-DEV = False
+DEV = True
 
 if DEV == False:
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
@@ -49,7 +49,7 @@ class Accounts(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     account_username = db.Column(db.String(15), unique=True, nullable=False)
     account_email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(15), nullable=False)
+    password = db.Column(db.String(80), nullable=False)
 
     def __repr__(self, account_username, account_email, password):
         self.account_username = account_username
@@ -78,8 +78,6 @@ def invalid_credentials(form, field):
 
 class LoginForm(FlaskForm):
     username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
-    #pasword min and max might get changed to 8 and 80 respectively
-
     password = PasswordField('password', validators=[InputRequired(), invalid_credentials])
     submit_button = SubmitField('Login')
     #remember = BooleanField('remember me')
@@ -89,7 +87,7 @@ class SignUpForm(FlaskForm):
         validators=[InputRequired(), Length(min=4, max=15, message="Username must be between 4 and 15 characters")])
     email = StringField('email_label', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
     password = PasswordField('password_label',
-        validators=[InputRequired(), Length(min=6, max=15, message="Password must be between 6 and 15 characters")])
+        validators=[InputRequired(), Length(min=4, max=25, message="Password must be between 6 and 15 characters")])
     confirm_pswd = PasswordField('confirm_pswd_label', validators=[InputRequired(), EqualTo('password', message="passwords must match")])
     user_agree = BooleanField('agreement', validators=[DataRequired()])
     submit_button = SubmitField('Sign Up')
@@ -207,7 +205,7 @@ def contactDACO():
 
 @app.route('/contactDTOP')
 def contactDTOP():
-    return render_template("contactDTOP.html")    
+    return render_template("contactDTOP.html")
 
 @app.route('/delete/<int:id>')
 def delete(id):
