@@ -12,7 +12,7 @@ import os
 
 app = Flask(__name__)
 #variable DEV used for testing: it uses a sqlite dabatase to test, else: it uses heroku postgresql's database
-DEV = True
+DEV = False
 
 if DEV == False:
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
