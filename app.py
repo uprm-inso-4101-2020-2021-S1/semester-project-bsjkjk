@@ -44,7 +44,7 @@ class Report(db.Model):
 
 ## table used for storing account information ##
 class Accounts(db.Model, UserMixin):
-    user_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     account_username = db.Column(db.String(15), unique=True, nullable=False)
     account_email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(15), nullable=False)
@@ -53,7 +53,7 @@ class Accounts(db.Model, UserMixin):
         self.account_username = account_username
         self.account_email = account_email
         self.password = password
-        return '<Account %r>' % self.user_id
+        return '<Account %r>' % self.id
 ##### Account and admin stuff ########################
 class MyModelView(ModelView):
     def is_accessible(self):
