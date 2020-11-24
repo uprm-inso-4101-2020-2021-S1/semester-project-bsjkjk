@@ -106,8 +106,9 @@ def index():
         for field in form:
             if form[field] == "":
                 return redirect('/')
-        report_username = request.form['username']
-        report_email = request.form['email']
+
+        report_username = current_user.account_username
+        report_email = current_user.account_email
         report_type = request.form['fault_type']
         report_content = request.form['content']
         new_report = Report(username=report_username, email=report_email, fault_type=report_type, content=report_content)
@@ -164,17 +165,21 @@ def signIn():
     login_form = LoginForm()
 
     if login_form.validate_on_submit():
-        return "Logged in, finally!"
-    #username = request.form['username']
-    #user = Accounts.query.get_or_404(current_user)
-    #login_user(user)
+        user_object = Accounts.query.filter_by(account_username=login_form.username.data).first()
+        login_user(user_object)
+        if current_user.is_authenticated:
+            return redirect('/')
+        return "Not logged in!"
+
     return render_template("signIn.html", form=login_form)
 
 @app.route('/logOut')
 @login_required
 def logOut():
     logout_user()
-    return redirect('/signIn')
+    return "You logged out"
+
+
 ##############################################################################
 
 @app.route('/contactAAA')
