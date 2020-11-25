@@ -104,6 +104,7 @@ class SignUpForm(FlaskForm):
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
+
     # this operation deletes any report that has expired #
     reports = Report.query.order_by(Report.date_created).all()
     expiration_hours = 1
