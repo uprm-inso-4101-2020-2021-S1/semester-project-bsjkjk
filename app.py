@@ -6,9 +6,10 @@ from flask_login import UserMixin, LoginManager, current_user, login_user, logou
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import InputRequired, Email, Length, EqualTo, ValidationError, DataRequired
-from datetime import datetime
+from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+import random
 
 app = Flask(__name__)
 #variable DEV used for testing: it uses a sqlite dabatase to test, else: it uses heroku postgresql's database
@@ -35,13 +36,15 @@ class Report(db.Model):
     username = db.Column(db.String(15), nullable=False)
     email = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.now())
+    vouches = db.Column(db.Integer, default=0) # our upvote system
 
-    def __repr__(self, fault_type, content, username, email, date_created):
+    def __repr__(self, fault_type, content, username, email, date_created, vouches):
         self.fault_type = fault_type
         self.content = content
         self.username = username
         self.email = email
         self.date_created = date_created
+        self.vouches = vouches
         return '<Fault Report %r>' % self.id
 
 ## table used for storing account information ##
@@ -101,6 +104,17 @@ class SignUpForm(FlaskForm):
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
+    # this operation deletes any report that has expired #
+    reports = Report.query.order_by(Report.date_created).all()
+    expiration_hours = 1
+    for report in reports:
+        test = report.date_created
+        limit = report.date_created + timedelta(days=expiration_hours)
+
+        if datetime.now() >= limit:
+            db.session.delete(report)
+            db.session.commit()
+
     if request.method == 'POST':
         form = request.form
         for field in form:
