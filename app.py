@@ -228,7 +228,7 @@ def signIn():
 @login_required
 def logOut():
     logout_user()
-    return "You logged out"
+    return redirect(request.referrer)
 
 
 ##############################################################################

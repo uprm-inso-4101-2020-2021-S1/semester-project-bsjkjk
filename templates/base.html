@@ -41,6 +41,12 @@
             <li class="nav-item">
               <a class="nav-link" href="/signIn">Sign In</a>
             </li>
+            {% if current_user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" style="color:red" href="/logOut">Log out</a>
+              </li>
+
+            {% endif %}
           </ul>
         </div>
       </div>
