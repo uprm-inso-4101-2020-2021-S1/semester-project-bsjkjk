@@ -36,6 +36,7 @@ class Report(db.Model):
     username = db.Column(db.String(15), nullable=False)
     email = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.now())
+
     vouches = db.Column(db.Integer, default=0) # our upvote system
 
     def __repr__(self, fault_type, content, username, email, date_created, vouches):
@@ -47,12 +48,48 @@ class Report(db.Model):
         self.vouches = vouches
         return '<Fault Report %r>' % self.id
 
+class ReportVouch(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    report_id = db.Column(db.Integer, db.ForeignKey('report.id'))
+    accounts_id = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=False)
+
+@app.route('/vouch/<int:report_id>/<action>')
+@login_required
+def vouch_action(report_id, action):
+    report = Report.query.filter_by(id=report_id).first_or_404()
+    if action == 'vouch':
+        current_user.vouch_report(report)
+        db.session.commit()
+    if action == 'unvouch':
+        current_user.unvouch_report(report)
+        db.session.commit()
+    return redirect(request.referrer)
+
+
 ## table used for storing account information ##
 class Accounts(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     account_username = db.Column(db.String(15), unique=True, nullable=False)
     account_email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.Text(), nullable=False)
+
+    vouched = db.relationship('ReportVouch', foreign_keys='ReportVouch.accounts_id', backref='accounts', lazy='dynamic' )
+
+    def vouch_report(self, report):
+        if not self.has_vouched_report(report):
+            vouch = ReportVouch(accounts_id=self.id, report_id=report.id)
+            report.vouches += 1
+            db.session.add(vouch)
+
+    def unvouch_report(self, report):
+        if self.has_vouched_report(report):
+            ReportVouch.query.filter_by(accounts_id=self.id, report_id=report.id).delete()
+            report.vouches -= 1
+            db.session.commit()
+
+    def has_vouched_report(self, report):
+        return ReportVouch.query.filter(ReportVouch.accounts_id==self.id, ReportVouch.report_id==report.id).count() > 0
+
 
     def __repr__(self, account_username, account_email, password):
         self.account_username = account_username
@@ -101,7 +138,6 @@ class SignUpForm(FlaskForm):
             raise ValidationError("Username already exists, select a different username.")
 
 ##########################################################
-
 @app.route('/', methods=['POST', 'GET'])
 def index():
 
