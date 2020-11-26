@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import random
+import pytz
 
 app = Flask(__name__)
 #variable DEV used for testing: it uses a sqlite dabatase to test, else: it uses heroku postgresql's database
@@ -35,7 +36,7 @@ class Report(db.Model):
     content = db.Column(db.String(200), nullable=False)
     username = db.Column(db.String(15), nullable=False)
     email = db.Column(db.String(100), nullable=False)
-    date_created = db.Column(db.DateTime, default=datetime.now())
+    date_created = db.Column(db.DateTime, default=datetime.now(pytz.timezone('America/Santo_Domingo')))
 
     vouches = db.Column(db.Integer, default=0) # our upvote system
 
