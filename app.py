@@ -36,7 +36,7 @@ class Report(db.Model):
     content = db.Column(db.String(200), nullable=False)
     username = db.Column(db.String(15), nullable=False)
     email = db.Column(db.String(100), nullable=False)
-    date_created = db.Column(db.DateTime, default=datetime.now(pytz.timezone('America/Santo_Domingo')))
+    date_created = db.Column(db.DateTime, default=datetime.now())
 
     vouches = db.Column(db.Integer, default=0) # our upvote system
 
@@ -142,12 +142,15 @@ class SignUpForm(FlaskForm):
 @app.route('/', methods=['POST', 'GET'])
 def index():
 
+    time_difference = timedelta(hours=4)
     # this operation deletes any report that has expired #
     reports = Report.query.order_by(Report.date_created).all()
-    expiration_hours = 1
+    expiration_days = 1
+
     for report in reports:
-        test = report.date_created
-        limit = report.date_created + timedelta(days=expiration_hours)
+        #subtracting 4 hours so it won't show UTC, instead time is America/Santo_Domingo
+        #this is a temporal workarrounf until we find a solution
+        limit = report.date_created + timedelta(days=expiration_days)
 
         if datetime.now() >= limit:
             db.session.delete(report)
@@ -182,7 +185,7 @@ def index():
             reports.append(report)
             index += 1
 
-        return render_template("index.html", reports=reports)
+        return render_template("index.html", reports=reports, time_difference=time_difference)
 
 
 @app.route('/allReports')
