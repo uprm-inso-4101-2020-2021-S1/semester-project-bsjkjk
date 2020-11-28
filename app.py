@@ -14,7 +14,7 @@ import pytz
 
 app = Flask(__name__)
 #variable DEV used for testing: it uses a sqlite dabatase to test, else: it uses heroku postgresql's database
-DEV = False
+DEV = True
 
 if DEV == False:
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
@@ -36,7 +36,7 @@ class Report(db.Model):
     content = db.Column(db.String(200), nullable=False)
     username = db.Column(db.String(15), nullable=False)
     email = db.Column(db.String(100), nullable=False)
-    date_created = db.Column(db.DateTime, default=datetime.now())
+    date_created = db.Column(db.DateTime(timezone=True), default=datetime.now())
 
     vouches = db.Column(db.Integer, default=0) # our upvote system
 
@@ -137,6 +137,10 @@ class SignUpForm(FlaskForm):
         user_object = Accounts.query.filter_by(account_username=username.data).first()
         if user_object:
             raise ValidationError("Username already exists, select a different username.")
+    def validate_email(self, email):
+        email_object = Accounts.query.filter_by(account_email=email.data).first()
+        if email_object:
+            raise ValidationError("Email already in use with another account, select a different email.")
 
 ##########################################################
 @app.route('/', methods=['POST', 'GET'])
@@ -166,7 +170,8 @@ def index():
         report_email = current_user.account_email
         report_type = request.form['fault_type']
         report_content = request.form['content']
-        new_report = Report(username=report_username, email=report_email, fault_type=report_type, content=report_content)
+        date_created = datetime.now()
+        new_report = Report(username=report_username, email=report_email, fault_type=report_type, content=report_content, date_created=date_created)
 
         try:
             db.session.add(new_report)
