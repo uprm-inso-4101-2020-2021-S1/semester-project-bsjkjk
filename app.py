@@ -170,7 +170,7 @@ def index():
         report_email = current_user.account_email
         report_type = request.form['fault_type']
         report_content = request.form['content']
-        date_created = datetime.now()
+        date_created = datetime.now(tz=pytz.timezone('America/Santo_Domingo'))
         new_report = Report(username=report_username, email=report_email, fault_type=report_type, content=report_content, date_created=date_created)
 
         try:
