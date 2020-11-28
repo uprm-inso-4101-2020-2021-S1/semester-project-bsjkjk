@@ -36,7 +36,7 @@ class Report(db.Model):
     content = db.Column(db.String(200), nullable=False)
     username = db.Column(db.String(15), nullable=False)
     email = db.Column(db.String(100), nullable=False)
-    date_created = db.Column(db.DateTime)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
 
     vouches = db.Column(db.Integer, default=0) # our upvote system
 
