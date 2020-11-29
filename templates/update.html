@@ -5,11 +5,123 @@
 {% endblock %}
 
 {% block body %}
-<div class="content">
-  <h1 style='text-align: center'>Update Report</h1>
-    <form action="/update/{{report.id}}" method="POST">
-      <input type="text" name="content" id="content" value="{{report.content}}">
-      <input type="submit" value="Add Fault Report">
-    </form>
-  </div>
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <!-- Left Column -->
+      <div class="col-md-8">
+        <h1 class="mt-5" style="text-align:center">My Reports</h1>
+
+        <!-- Timeline -->
+        <div class="my-3 p-3 bg-white rounded shadow-sm">
+          <h6 class="border-bottom border-gray pb-2 mb-0">Last 24 hours</h6>
+
+          {% for report in user_reports %}
+          <div class="media text-muted pt-3">
+            <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect fill="#007bff" width="100%" height="100%"/><text fill="#007bff" dy=".3em" x="50%" y="50%">32x32</text></svg>
+            <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+              <strong class="d-block text-gray-dark"><a href="">{{ report.username }}</a> · {% set actual_date = report.date_created - time_difference %} {{ actual_date.strftime("%m/%d/%Y, %I:%M%p") }} | <a href="{{ url_for('delete', id=report.id)}}" style="color:red">Delete</a>
+                {% if current_user.is_authenticated %}
+                  {% if current_user.has_vouched_report(report) %}
+                    <a href="{{ url_for('vouch_action', report_id=report.id, action='unvouch') }}"><button type="button" class= "btn btn-primary" name="vouch" style="float: right;">
+                      vouch <span>&#10003;{{ report.vouches }}</span>
+                    </button></a>
+                  {% else %}
+                  <a href="{{ url_for('vouch_action', report_id=report.id, action='vouch') }}"><button type="button" class= "btn btn-primary" name="vouch" style="float: right;">
+                    vouch <span>&#10003;{{ report.vouches }}</span>
+                  </button></a>
+                  {% endif %}
+                {% else %}
+                <button type="button" class= "btn btn-primary" data-toggle="modal" data-target="#notLoggedModal" name="vouch" style="float: right;">
+                  vouch <span>&#10003;{{ report.vouches }}</span>
+                </button>
+                {% endif %}
+              </strong>
+              Fault type: {{ report.fault_type }} · {{ report.content }}
+              {% if report.resolved != 'UNRESOLVED' %}
+                <br>
+                Click to change status: <a href="{{ url_for('resolve', report_id1=report.id)}}"><b style="color:green"> RESOLVED</b></a>
+              {% else %}
+                <br>
+                Click to change status: <a href="{{ url_for('resolve', report_id1=report.id)}}"><b style="color:red"> UNRESOLVED</b></a>
+              {% endif %}
+              </p>
+            </div>
+          {% endfor %}
+          <small class="d-block text-right mt-3">
+            <a href="{{ url_for('allReports') }}">All Reports</a>
+          </small>
+          </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="col-md-4 ">
+
+
+            <!-- Start of Fault Submissions -->
+            <h2 class="mt-5 text-center">Submit Fault Report</h2><br>
+            <form action="/" method = "POST">
+
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Fault Type</label>
+              <select class="form-control" id="fault_type" name="fault_type">
+                <option>AAA</option>
+                <option>AEE</option>
+                <option>DACO</option>
+                <option>DTOP</option>
+                <option>ISP</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Fault Report</span>
+              </div>
+              <textarea name="content" id="content" class="form-control" aria-label="With textarea" placeholder="E.g. Tubería rota en la Urbanización Terrace, Mayagüez."></textarea>
+            </div><br>
+            {% if current_user.is_authenticated %}
+              <button type="submit" class="btn btn-primary">Submit</button>
+          {% else %}
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#notLoggedModal">Submit</button>
+          {% endif %}
+          </form>
+        </div>
+        </div>
+        </div>
+
+      <!-- The Modal -->
+        <div class="modal fade" id="notLoggedModal">
+          <div class="modal-dialog modal-dialog-centered"">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">You're not Logged in</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+
+              <!-- Modal body -->
+              <div class="modal-body">
+                To use this feature you need to <a href="{{ url_for('signIn') }}">Login</a> first.
+                Or <a href="{{ url_for('signUp') }}">Sign Up</a> if you don't have an account yet.
+              </div>
+                <!-- Modal footer -->
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+          </div>
+         </div>
+
+         <div class="footer text-center">
+           <p>BSJKJK © 2020</p>
+         </div>
+
+      <!-- Bootstrap core JavaScript -->
+      <script src="{{ url_for('static', filename='jquery/jquery.slim.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 {% endblock %}

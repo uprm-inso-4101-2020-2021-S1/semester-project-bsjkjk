@@ -37,11 +37,19 @@
                 </button>
                 {% endif %}
               </strong>
-               {{ report.content }}</p>
+              Fault type: {{ report.fault_type }} · {{ report.content }}
+              {% if report.resolved == 'RESOLVED' %}
+              <br>
+              Status: <b style="color:green"> {{ report.resolved }}</b>
+              {% elif report.resolved == 'UNRESOLVED' %}
+              <br>
+              Status: <b style="color:red"> {{ report.resolved }}</b>
+              {% endif %}
+              </p>
             </div>
           {% endfor %}
           <small class="d-block text-right mt-3">
-            <a href="{{ url_for('allReports') }}">All Reports</a>
+              <a href="{{ url_for('update') }}">My Reports</a> | <a href="{{ url_for('allReports') }}">All Reports</a>
           </small>
           </div>
           </div>
@@ -80,7 +88,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text">Fault Report</span>
               </div>
-              <textarea name="content" id="content" class="form-control" aria-label="With textarea"></textarea>
+              <textarea name="content" id="content" class="form-control" aria-label="With textarea" placeholder="E.g. Tubería rota en la Urbanización Terrace, Mayagüez."></textarea>
             </div><br>
             {% if current_user.is_authenticated %}
               <button type="submit" class="btn btn-primary">Submit</button>
@@ -91,37 +99,37 @@
           </div>
 
           </div>
-        </div>
+          </div>
 
         <!-- The Modal -->
-      <div class="modal fade" id="notLoggedModal">
-    <div class="modal-dialog modal-dialog-centered"">
-      <div class="modal-content">
+          <div class="modal fade" id="notLoggedModal">
+            <div class="modal-dialog modal-dialog-centered"">
+              <div class="modal-content">
 
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">You're not Logged in</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">You're not Logged in</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
 
-    <!-- Modal body -->
-    <div class="modal-body">
-      To use this feature you need to <a href="{{ url_for('signIn') }}">Login</a> first.
-      Or <a href="{{ url_for('signUp') }}">Sign Up</a> if you don't have an account yet.
-    </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                  To use this feature you need to <a href="{{ url_for('signIn') }}">Login</a> first.
+                  Or <a href="{{ url_for('signUp') }}">Sign Up</a> if you don't have an account yet.
+                </div>
 
-    <!-- Modal footer -->
-    <div class="modal-footer">
-      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-    </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
 
-    </div>
-  </div>
-</div>
+              </div>
+            </div>
+          </div>
 
-      <div class="footer text-center">
-        <p>BSJKJK © 2020</p>
-      </div>
+          <div class="footer text-center">
+            <p>BSJKJK © 2020</p>
+          </div>
 
       <!-- Bootstrap core JavaScript -->
       <script src="{{ url_for('static', filename='jquery/jquery.slim.min.js') }}"></script>

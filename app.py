@@ -37,16 +37,19 @@ class Report(db.Model):
     username = db.Column(db.String(15), nullable=False)
     email = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
+    resolved = db.Column(db.String(20), nullable=False, default='UNRESOLVED')
 
     vouches = db.Column(db.Integer, default=0) # our upvote system
 
-    def __repr__(self, fault_type, content, username, email, date_created, vouches):
+    def __repr__(self, fault_type, content, username, email, date_created, resolved, vouches):
         self.fault_type = fault_type
         self.content = content
         self.username = username
         self.email = email
         self.date_created = date_created
         self.vouches = vouches
+        self.resolved = resolved
+
         return '<Fault Report %r>' % self.id
 
 class ReportVouch(db.Model):
@@ -164,7 +167,7 @@ def index():
         form = request.form
         for field in form:
             if form[field] == "":
-                return redirect('/')
+                return redirect(request.referrer)
 
         report_username = current_user.account_username
         report_email = current_user.account_email
@@ -195,9 +198,10 @@ def index():
 
 @app.route('/allReports')
 def allReports():
-        reports = Report.query.order_by(Report.date_created).all()
-        reports = reversed(reports)
-        return render_template("allReports.html", reports=reports)
+    time_difference = timedelta(hours=4)
+    reports = Report.query.order_by(Report.date_created).all()
+    reports = reversed(reports)
+    return render_template("allReports.html", reports=reports, time_difference=time_difference)
 
 ###################Sign Up/Sign In routes (and LogOut)####################################
 @app.route('/signUp', methods=['POST', 'GET'])
@@ -264,27 +268,31 @@ def delete(id):
     try:
         db.session.delete(report_to_delete)
         db.session.commit()
-        return redirect('/')
+        return redirect(request.referrer)
     except:
         return 'There was a problem deleting that task'
 
+@app.route('/update')
+def update():
+    time_difference = timedelta(hours=4)
+    user_reports = Report.query.filter_by(username=current_user.account_username).all()
+    user_reports = reversed(user_reports)
+    return render_template("update.html", user_reports=user_reports, time_difference=time_difference)
 
-@app.route('/update/<int:id>', methods=['GET', 'POST'])
-def update(id):
-    report = Report.query.get_or_404(id)
+@app.route('/resolve/<int:report_id1>')
+@login_required
+def resolve(report_id1):
+    report = Report.query.filter_by(id=report_id1).first()
+    if report.resolved == 'UNRESOLVED':
+        report.resolved = 'RESOLVED'
+        db.session.commit()
+        return redirect(request.referrer)
+    if report.resolved == 'RESOLVED':
+        report.resolved = 'UNRESOLVED'
+        db.session.commit()
+        return redirect(request.referrer)
 
-    if request.method == 'POST':
-        report.content = request.form['content']
-
-        try:
-            db.session.commit()
-            return redirect('/')
-        except:
-            return 'There was an issue updatin your report.'
-    else:
-        return render_template('update.html', report=report)
-
-
+    return redirect('/update')
 
 if __name__ == "__main__":
     app.run() #debug=True, port = 5001
