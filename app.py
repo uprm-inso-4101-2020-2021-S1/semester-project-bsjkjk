@@ -275,7 +275,7 @@ def delete(id):
 @app.route('/update')
 def update():
     time_difference = timedelta(hours=4)
-    user_reports = Report.query.filter_by(username=current_user.account_username).all()
+    user_reports = Report.query.filter_by(username=current_user.account_username).order_by(Report.date_created).all()
     user_reports = reversed(user_reports)
     return render_template("update.html", user_reports=user_reports, time_difference=time_difference)
 
