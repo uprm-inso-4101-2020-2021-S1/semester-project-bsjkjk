@@ -266,6 +266,10 @@ def contactDACO():
 def contactDTOP():
     return render_template("contactDTOP.html")
 
+@app.route('/contactISP')
+def contactISP():
+    return render_template("contactISP.html")
+
 @app.route('/delete/<int:id>')
 def delete(id):
     report_to_delete = Report.query.get_or_404(id)
