@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block head%}
+    <title>Frequently Asked Questions</title>
+    <link rel="import" href="base.html">
+    <!--Ion icons-->
+    <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="\static\bootstrap\css\faq-styles.css">
+{% endblock %}
+
+{% block body %}
+    <main>
+        <div class="upper-title">
+            <br />
+            <h1>Frequently Asked Questions (FAQ)</h1>
+            <br />
+        </div>   
+        <section>
+            <div class="container">
+                <div class="accordion">
+                    <div class="accordion-item" id="question1">
+                        <a class="accordion-link" href="#question1">
+                            How do I report a fault?
+                            <i class="icon ion-md-add"></i>
+                            <i class="icon ion-md-remove"></i>
+                        </a>
+                        <div class="answer">
+                            <p>
+                                To submit a fault report you will need to create an account. To create a report, 
+                                choose a fault type depending on your issue then below you will provide information 
+                                about the fault and its location. After, click the submit button and 
+                                your report will appear.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item" id="question2">
+                        <a class="accordion-link" href="#question2">
+                            How do I create an account?
+                            <i class="icon ion-md-add"></i>
+                            <i class="icon ion-md-remove"></i>
+                        </a>
+                        <div class="answer">
+                            <p>
+                                To create and account go to the upper menu and click Sign Up. Enter a 
+                                unique username, your email, and a password. Once all your information 
+                                is entered, click the Sign Up button.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item" id="question3">
+                        <a class="accordion-link" href="#question3">
+                            How can I find information or get in contact directly with a specific agency?
+                            <i class="icon ion-md-add"></i>
+                            <i class="icon ion-md-remove"></i>
+                        </a>
+                        <div class="answer">
+                            <p>
+                                To find the information go to our homepage and search for the Contact Information section
+                                which contains a list of agencies. Click on the desired agency to see information about them,
+                                including phone numbers, links to their website and social medias.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item" id="question4">
+                        <a class="accordion-link" href="#question4">
+                            How do I create a fault report for an agency not demonstrated in the available options?
+                            <i class="icon ion-md-add"></i>
+                            <i class="icon ion-md-remove"></i>
+                        </a>
+                        <div class="answer">
+                            <p>
+                                If the agency is not in the available options, follow the same process of reporting a fault 
+                                but in the fault type choose the "Other" option. It is recommended to include the agency 
+                                related to the fault and be more specific in your description.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item" id="question5">
+                        <a class="accordion-link" href="#question5">
+                            What is the vouch button for?
+                            <i class="icon ion-md-add"></i>
+                            <i class="icon ion-md-remove"></i>
+                        </a>
+                        <div class="answer">
+                            <p>
+                                The vouch button works as an upvote system. Other users can vouch your report to confirm that 
+                                they have been witnesses to the fault in the specified location. It is also used so different
+                                users do not have to report the same fault multiple times.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

@@ -203,6 +203,10 @@ def allReports():
     reports = reversed(reports)
     return render_template("allReports.html", reports=reports, time_difference=time_difference)
 
+@app.route('/faq')
+def faq():
+    return render_template("faq.html")    
+
 ###################Sign Up/Sign In routes (and LogOut)####################################
 @app.route('/signUp', methods=['POST', 'GET'])
 def signUp():
@@ -261,6 +265,10 @@ def contactDACO():
 @app.route('/contactDTOP')
 def contactDTOP():
     return render_template("contactDTOP.html")
+
+@app.route('/contactISP')
+def contactISP():
+    return render_template("contactISP.html")
 
 @app.route('/delete/<int:id>')
 def delete(id):
